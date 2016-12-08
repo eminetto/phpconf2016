@@ -21,13 +21,15 @@ class Format implements MiddlewareInterface
         }
         switch ($accept) {
             case 'application/json':
-                return new JsonResponse($content, $response->getStatusCode());
+                // return new JsonResponse($content, $response->getStatusCode());
+                return $out($request, new JsonResponse($content, $response->getStatusCode()));
                 break;
             default:
                 $twig = new TwigRenderer();
                 $twig->addPath('views');
                 $html = $twig->render('content.twig', ['content' => $content]);
-                return new HtmlResponse($html);
+                // return new HtmlResponse($html);
+                return $out($request, new HtmlResponse($html));
                 break;
         }
     }

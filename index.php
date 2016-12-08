@@ -63,12 +63,16 @@ beer (id INTEGER PRIMARY KEY AUTOINCREMENT, name text not null, style text not n
     return $response->withStatus(201);
 });
 
+$app->get('/admin',new \RestBeer\Admin());
 
-
+$app->pipe(new \RestBeer\Auth());
+// $app->pipe(new \RestBeer\Auth\Authentication());
+// $app->pipe(new \RestBeer\Auth\Authorization());
 $app->pipeRoutingMiddleware();
 $app->pipeDispatchMiddleware();
 $app->pipe(new \RestBeer\Format());
 // $app->pipe(new \RestBeer\Format\Json());
 // $app->pipe(new \RestBeer\Format\Html());
 // $app->pipe(new \RestBeer\Format\Gzip());
+// $app->pipe(new \RestBeer\Auth\Accounting());
 $app->run();
