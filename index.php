@@ -1,9 +1,11 @@
 <?php
 use Zend\Expressive\AppFactory;
 
-require 'vendor/autoload.php';
+// require 'vendor/autoload.php';
+$loader = require __DIR__.'/vendor/autoload.php';
+$loader->add('RestBeer', __DIR__.'/src');
 
-ini_set('error_reporting', 0);
+// ini_set('error_reporting', 1);
 $app = AppFactory::create();
 
 $app->get('/', function ($request, $response, $next) {
@@ -19,7 +21,7 @@ $beers = array(
 $app->get('/brands', function ($request, $response, $next) use ($beers) {
     $response->getBody()->write(implode(',', $beers['brands']));
     
-    return $response;
+    return $next($request, $response);
 });
 
 $app->get('/styles', function ($request, $response, $next) use ($beers) {
@@ -65,4 +67,8 @@ beer (id INTEGER PRIMARY KEY AUTOINCREMENT, name text not null, style text not n
 
 $app->pipeRoutingMiddleware();
 $app->pipeDispatchMiddleware();
+$app->pipe(new \RestBeer\Format());
+// $app->pipe(new \RestBeer\Format\Json());
+// $app->pipe(new \RestBeer\Format\Html());
+// $app->pipe(new \RestBeer\Format\Gzip());
 $app->run();
