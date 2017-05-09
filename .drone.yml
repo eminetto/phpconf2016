@@ -1,0 +1,7 @@
+pipeline:
+  test:
+    image: planrockr/docker-php7-cli
+    commands:
+      - curl --silent --show-error https://getcomposer.org/installer | php
+      - php composer.phar install
+      - ./vendor/bin/phpunit --coverage-text --colors=never
